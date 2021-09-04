@@ -8,7 +8,11 @@ ENV FLB_VERSION 1.7.1
 
 ARG FLB_TARBALL=https://github.com/fluent/fluent-bit/archive/v$FLB_VERSION.tar.gz
 ENV FLB_SOURCE $FLB_TARBALL
-RUN mkdir -p /fluent-bit/bin /fluent-bit/etc /fluent-bit/log /tmp/fluent-bit-master/
+RUN mkdir -p \
+        /fluent-bit/bin \
+        /fluent-bit/etc \
+        /fluent-bit/log \
+        /tmp/fluent-bit-master/
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -54,15 +58,7 @@ RUN make -j $(getconf _NPROCESSORS_ONLN)
 RUN install bin/fluent-bit /fluent-bit/bin/
 
 # Configuration files
-COPY tmpConf/fluent-bit.conf \
-     tmpConf/parsers.conf \
-     tmpConf/parsers_ambassador.conf \
-     tmpConf/parsers_java.conf \
-     tmpConf/parsers_extra.conf \
-     tmpConf/parsers_openstack.conf \
-     tmpConf/parsers_cinder.conf \
-     tmpConf/plugins.conf \
-     /fluent-bit/etc/
+COPY podman/fluent-bit/conf/ /fluent-bit/etc/
 
 FROM gcr.io/distroless/cc-debian10
 LABEL Description="Fluent Bit docker image" Vendor="Fluent Organization" Version="1.1"
@@ -123,9 +119,6 @@ ENV VAULT_ADDR "https://vault-iit.apps.silver.devops.gov.bc.ca"
 # AWS Kinesis
 ENV AWS_KINESIS_STREAM "nress-prod-iit-logs"
 ENV AWS_KINESIS_ROLE_ARN "arn:aws:iam::578527843179:role/PBMMOps-BCGOV_prod_Project_Role_ES_Role"
-
-# Host
-ENV HOST_OS_TYPE "linux"
 
 # Entry point
 CMD [ \

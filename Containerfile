@@ -1,6 +1,6 @@
 FROM amd64/debian:buster-slim as builder
 
-# Fluent Bit version
+# Build vars
 ENV FLB_MAJOR 1
 ENV FLB_MINOR 7
 ENV FLB_PATCH 1
@@ -108,8 +108,30 @@ COPY --from=builder /usr/local/bin/envconsul /usr/local/bin/envconsul
 
 EXPOSE 2020
 
+### Run vars ###
+
+# Fluent Bit
 ENV FLUENT_HOME /fluent-bit
 ENV FLUENT_VERSION 1.7.1
+ENV FLUENT_LABEL_ENV "test"
+ENV FLUENT_INPUT_LOGS_PATH "/sw_ux/httpd0*/logs/hot/*-access*.log*"
+ENV FLUENT_HOME "."
+
+# Vault
+ENV VAULT_ADDR "https://vault-iit.apps.silver.devops.gov.bc.ca"
+
+# AWS Kinesis
+ENV AWS_KINESIS_STREAM "nress-prod-iit-logs"
+ENV AWS_KINESIS_ROLE_ARN "arn:aws:iam::578527843179:role/PBMMOps-BCGOV_prod_Project_Role_ES_Role"
+
+# Host
+ENV HOST_OS_TYPE "linux"
 
 # Entry point
-CMD ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.conf"]
+CMD [ \
+        "envconsul", \
+        "-config=/fluent-bit/etc/fluent-bit.hcl", \
+        "/fluent-bit/bin/fluent-bit", \
+        "-c", \
+        "/fluent-bit/etc/fluent-bit.conf" \
+    ]

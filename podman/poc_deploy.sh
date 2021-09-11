@@ -2,12 +2,15 @@
 #%
 #% Fluent Bit deployer
 #%
-#%   Requires Podman, a vault token and privileged access to /proc/stat on the host.
+#%   Requires Podman, a preloaded vault token ($VAULT_TOKEN) and privileged host access to /proc/stat.
 #%
 #% Usage:
 #%
-#%   ${THIS_FILE} [VAULT_TOKEN]
+#%   ${THIS_FILE} [command]
 #%
+#% Commands:
+#%   deploy Deploys Fluent Bit
+#%   help   Displays this help dialog
 
 
 # Specify halt conditions (errors, unsets, non-zero pipes), field separator and verbosity
@@ -16,9 +19,13 @@ set -euo pipefail
 [ ! "${VERBOSE:-}" == "true" ] || set -x
 
 
+# Parameters
+#
+COMMAND="${1:-help}"
+
 # If no parameters have been passed show the help header from this script
 #
-[ "${#}" -gt 0 ] || {
+[ "${COMMAND}" = "deploy" ] || {
 	THIS_FILE="$(dirname ${0})/$(basename ${0})"
 
 	# Cat this file, grep #% lines and clean up with sed
@@ -30,9 +37,10 @@ set -euo pipefail
 }
 
 
-# Parameters
+# Vault vars
 #
-VAULT_TOKEN=${1:-}
+export VAULT_ADDR=https://vault-iit.apps.silver.devops.gov.bc.ca
+export VAULT_TOKEN=$(vault login -method=oidc -format json 2>/dev/null | jq -r '.auth.client_token')
 
 
 # Host vars
@@ -58,4 +66,4 @@ podman build .. -t fb
 
 # Run in foreground, passing vars
 #
-podman run --name fluent-bit --rm -e VAULT_TOKEN -e HOST_* --pid="host" -v "/proc/stat:/proc/stat:ro" --privileged localhost/fb
+podman run --name fluent-bit --rm -e VAULT_* -e HOST_* --pid="host" -v "/proc/stat:/proc/stat:ro" --privileged localhost/fb

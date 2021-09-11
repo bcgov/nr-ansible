@@ -1,5 +1,5 @@
 vault {
-  address = "${VAULT_ADDR}"
+  address = "https://vault-iit.apps.silver.devops.gov.bc.ca"
   renew_token = true
 }
 

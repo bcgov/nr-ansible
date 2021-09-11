@@ -5,12 +5,12 @@
 #%   Requires Podman, a preloaded vault token ($VAULT_TOKEN) and privileged host access to /proc/stat.
 #%
 #% Usage:
-#%
 #%   ${THIS_FILE} [command]
 #%
 #% Commands:
 #%   deploy Deploys Fluent Bit
 #%   help   Displays this help dialog
+#%
 
 
 # Specify halt conditions (errors, unsets, non-zero pipes), field separator and verbosity
@@ -19,12 +19,9 @@ set -euo pipefail
 [ ! "${VERBOSE:-}" == "true" ] || set -x
 
 
-# Parameters
+# Check parameters - default to showing the help header from this script
 #
 COMMAND="${1:-help}"
-
-# If no parameters have been passed show the help header from this script
-#
 [ "${COMMAND}" = "deploy" ] || {
 	THIS_FILE="$(dirname ${0})/$(basename ${0})"
 
@@ -39,24 +36,31 @@ COMMAND="${1:-help}"
 
 # Vault vars
 #
-export VAULT_ADDR=https://vault-iit.apps.silver.devops.gov.bc.ca
-export VAULT_TOKEN=$(vault login -method=oidc -format json 2>/dev/null | jq -r '.auth.client_token')
+export VAULT_ADDR="https://vault-iit.apps.silver.devops.gov.bc.ca"
+export VAULT_TOKEN="$(vault login -method=oidc -format json 2>/dev/null | jq -r '.auth.client_token')"
 
 
-# Host vars
+# Host Metadata - OS
 #
-export HOST_OS_FAMILY=$(cat /etc/os-release | grep -e '^ID=' |  cut -d'=' -f2 | xargs)
-export HOST_OS_KERNEL=$(uname -r)
+export HOST_OS_FAMILY="$(cat /etc/os-release | grep -e '^ID=' |  cut -d'=' -f2 | xargs)"
+export HOST_OS_FULL="$(cat /etc/os-release | grep -e '^PRETTY_NAME=' |  cut -d'=' -f2 | xargs)"
+export HOST_OS_KERNEL="$(uname -r)"
 export HOST_OS_NAME="$(cat /etc/os-release | grep -e '^NAME=' |  cut -d'=' -f2 | xargs)"
-export HOST_OS_FULL=$(cat /etc/os-release | grep -e '^PRETTY_NAME=' |  cut -d'=' -f2 | xargs)
-export HOST_OS_VERSION=$(cat /etc/os-release | grep -e '^VERSION_ID=' |  cut -d'=' -f2 | xargs)
-export HOST_ID=$(hostname -f)
-export HOST_HOSTNAME=$(hostname -s)
-export HOST_NAME=$(domainname -A | tr " " "\n" | sort | uniq | tr '\n' ' ' | xargs)
-export HOST_DOMAIN=$(printf "$HOST_NAME" | tr " " "\n" | awk -F. '{$1="";OFS="." ; print $0}' | sed 's/^.//' | sort | uniq | tr '\n' ' ' | xargs)
-export HOST_ARCH=$(uname -m)
-export HOST_IP=$(ip addr | grep 'inet' | tr -s " " | cut -d' ' -f3 | cut -d'/' -f1 | grep -v '127.0.0.1')
-export HOST_MAC=$(ip link | grep 'link/ether' | tr -s " " | cut -d' ' -f3)
+export HOST_OS_TYPE="$(uname)"
+export HOST_OS_VERSION="$(cat /etc/os-release | grep -e '^VERSION_ID=' |  cut -d'=' -f2 | xargs)"
+
+
+# Host Metadata - General
+#
+export DEFAULT_NET="$(route | grep default | awk '{print $8}')"
+#
+export HOST_ARCH="$(uname -m)"
+export HOST_HOSTNAME="$(hostname -s)"
+export HOST_ID="$(hostname -f)"
+export HOST_IP="$(hostname -I | cut -d' ' -f1)"
+export HOST_MAC="$(ip link show ${DEFAULT_NET} | grep -i 'link' | awk '{print $2}' )"
+export HOST_NAME="${HOST_HOSTNAME}"
+export HOST_DOMAIN="$(echo ${HOST_HOSTNAME#[[:alpha:]]*.})"
 
 
 # Build

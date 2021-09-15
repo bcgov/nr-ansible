@@ -2,7 +2,7 @@
 #%
 #% Fluent Bit deployer
 #%
-#%   Requires Podman, a preloaded vault token ($VAULT_TOKEN) and privileged host access to /proc/stat.
+#%   Requires Podman, vault and privileged host access to /proc/stat.
 #%
 #% Usage:
 #%   ${THIS_FILE} [command]
@@ -13,7 +13,7 @@
 #%
 
 
-# Specify halt conditions (errors, unsets, non-zero pipes), field separator and verbosity
+# Specify halt conditions (errors, unsets, non-zero pipes) and verbosity
 #
 set -euo pipefail
 [ ! "${VERBOSE:-}" == "true" ] || set -x
@@ -32,6 +32,15 @@ COMMAND="${1:-help}"
 		sed -e "s|\${THIS_FILE}|${THIS_FILE}|g"
 	exit
 }
+
+
+# Verify prerequisites
+#
+if( ! ( which podman && which vault))
+then
+	echo -e "\nPlease verify podman and vault are installed\n"
+	exit
+fi
 
 
 # Vault vars

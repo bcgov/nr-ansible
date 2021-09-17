@@ -61,7 +61,7 @@ export HOST_OS_VERSION="$(cat /etc/os-release | grep -e '^VERSION_ID=' |  cut -d
 
 # Host Metadata - General
 #
-export DEFAULT_NET="$(route | grep default | awk '{print $8}')"
+export DEFAULT_NET="$(ip route get 8.8.8.8 | cut -d' ' -f5 | grep -v 'cache')"
 #
 export HOST_ARCH="$(uname -m)"
 export HOST_HOSTNAME="$(hostname -s)"

@@ -2,7 +2,7 @@
 #%
 #% Fluent Bit deployer
 #%
-#%   Requires Podman, vault and privileged host access to /proc/stat.
+#%   Requires Podman, vault, jq and privileged host access to /proc/stat.
 #%
 #% Usage:
 #%   ${THIS_FILE} [command]
@@ -36,9 +36,9 @@ COMMAND="${1:-help}"
 
 # Verify prerequisites
 #
-if( ! ( which podman && which vault))
+if( ! ( which podman && which vault && which jq))
 then
-	echo -e "\nPlease verify podman and vault are installed\n"
+	echo -e "\nPlease verify podman, vault and jq are installed\n"
 	exit
 fi
 

@@ -74,7 +74,7 @@ export HOST_DOMAIN="$(echo ${HOST_HOSTNAME#[[:alpha:]]*.})"
 
 # Build
 #
-podman build .. -t fb
+podman build ./fluent-bit -t fb
 
 
 # Run in foreground, passing vars

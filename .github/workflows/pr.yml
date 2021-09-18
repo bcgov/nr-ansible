@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-fluent-bit
+  BUILD_PATH: podman/fluent-bit
 
 jobs:
   # https://github.community/t/run-job-only-if-folder-changed/118292
@@ -19,31 +20,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
+          # https://github.com/actions/checkout
           fetch-depth: 2
 
-      - name: Diff modified files
+      - name: Check and process modified files
         id: check
         run: |
-          echo "=============== get modified files ==============="
-          git diff --name-only HEAD^ HEAD > diff.txt
-          cat diff.txt
-
-          # Default to build = false
-          echo "::set-output name=build::false"
-
-          echo "========== check paths of modified files =========="
-          while read -r file
+          # Check git diff against build path
+          while read -r filename
           do
-            echo $file
-            if [[ $file == podman/fluent-bit/* ]]; then
-              echo "$file under podman/fluent-bit/ -- triggering build"
+            if [[ $filename == ${{ env.BUILD_PATH }}/* ]]
+            then
+              echo "$filename --> triggering build"
               echo "::set-output name=build::true"
               break
-            else
-              echo "$file is not under podman/fluent-bit"
             fi
-          done < diff.txt
-
+          done < <(git diff --name-only)
 
   build-and-push-image:
     needs: build-checks
@@ -55,8 +47,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
 
       # https://github.com/marketplace/actions/docker-login#github-container-registry
       - name: Login to GitHub Container Registry
@@ -77,7 +67,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2.7.0
         with:
-          context: ./podman/fluent-bit
+          context: ${{ env.BUILD_PATH }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

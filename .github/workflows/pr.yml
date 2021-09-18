@@ -10,15 +10,53 @@ env:
   IMAGE_NAME: ${{ github.repository }}-fluent-bit
 
 jobs:
+  # https://github.community/t/run-job-only-if-folder-changed/118292
+  build-checks:
+    outputs:
+      build: ${{ steps.check.outputs.build }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Diff modified files
+        id: check
+        run: |
+          echo "=============== get modified files ==============="
+          git diff --name-only HEAD^ HEAD > diff.txt
+          cat diff.txt
+
+          # Default to build = false
+          echo "::set-output name=build::false"
+
+          echo "========== check paths of modified files =========="
+          while read -r file
+          do
+            echo $file
+            if [[ $file == podman/fluent-bit/* ]]; then
+              echo "$file under podman/fluent-bit/ -- triggering build"
+              echo "::set-output name=build::true"
+              break
+            else
+              echo "$file is not under podman/fluent-bit"
+            fi
+          done < diff.txt
+
+
   build-and-push-image:
+    needs: build-checks
+    if: needs.build-checks.outputs.build == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       # https://github.com/marketplace/actions/docker-login#github-container-registry
       - name: Login to GitHub Container Registry

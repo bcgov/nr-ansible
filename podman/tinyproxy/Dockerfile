@@ -21,7 +21,7 @@ RUN microdnf install gcc make gzip tar wget && \
 	microdnf clean all
 
 # Configuration
-COPY ./conf /usr/local/etc/tinyproxy
+COPY ./conf/ /usr/local/etc/tinyproxy/
 
 # Startup
 USER 1001

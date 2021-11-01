@@ -11,7 +11,7 @@ EXPOSE 8888/tcp
 RUN microdnf install gcc make gzip tar wget && \
 	wget https://github.com/tinyproxy/tinyproxy/releases/download/${tpVersion}/${tpRelease}.tar.gz && \
 	tar xzvf ${tpRelease}.tar.gz -C /tmp && \ 
-  cd /tmp/${tpRelease} && \
+	cd /tmp/${tpRelease} && \
 	./configure && \
 	make && \
 	make install && \

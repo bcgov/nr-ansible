@@ -22,11 +22,7 @@ RUN wget https://github.com/tinyproxy/tinyproxy/releases/download/${tpVersion}/$
 	rm -rf ${tpRelease} ${tpRelease}.tar.gz
 
 # Configuration
-RUN sed -i /usr/local/etc/tinyproxy/tinyproxy.conf \
-	-e "s/^#Filter/Filter/" \
-	-e "s/^#FilterURLs/FilterURLs/" \
-	-e "s/^#FilterExtended/FilterExtended/" \
-	-e "s/^#FilterDefaultDeny/FilterDefaultDeny/"
+COPY ./conf /usr/local/etc/tinyproxy
 
 # Startup
 USER 1001

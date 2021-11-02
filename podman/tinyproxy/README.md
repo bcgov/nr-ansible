@@ -21,7 +21,7 @@ docker run -p 23128:8888 tinyproxy
 Optionally, use a mount to consume custom config.
 
 ```
-docker run --rm -p 23128:8888 --name=tp -v $(pwd)/conf/:/usr/local/etc/tinyproxy/:z tp
+docker run -p 23128:8888 --name=tinyproxy -v $(pwd)/conf/:/usr/local/etc/tinyproxy/:z tinyproxy
 ```
 
 Note: SELinux (e.g. RedHat) requires `:z` to be addewd to volumnes.

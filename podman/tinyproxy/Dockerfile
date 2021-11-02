@@ -1,28 +1,26 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+# Builder
+FROM registry.access.redhat.com/ubi8/ubi-minimal as builder
 
 # Vars
-ENV tpVersion 1.10.0
-ENV tpRelease tinyproxy-${tpVersion}
-
-# Default port
-EXPOSE 8888/tcp
+ENV version 1.10.0
+ENV url https://github.com/tinyproxy/tinyproxy/releases/download/${version}/tinyproxy-${version}.tar.gz
 
 # Download, decompress, install and clean up
+WORKDIR /tmp/tinyproxy
 RUN microdnf install gcc make gzip tar && \
-	curl -L -o tinyproxy.tar.gz https://github.com/tinyproxy/tinyproxy/releases/download/${tpVersion}/${tpRelease}.tar.gz && \
-	tar xzvf tinyproxy.tar.gz -C /tmp && \
-	cd /tmp/${tpRelease} && \
+	curl -L -s ${url} | tar xzv -C . --strip-components 1 && \
 	./configure && \
 	make && \
-	make install && \
-	cd .. && \
-	rm -rf ${tpRelease} ${tpRelease}.tar.gz && \
-	microdnf remove gcc make gzip tar wget && \
-	microdnf clean all
+	make install
 
-# Configuration
+# Deployment container
+FROM registry.access.redhat.com/ubi8/ubi-micro
+
+# Copy binary and configuration
+COPY --from=builder /usr/local/bin/tinyproxy /usr/local/bin
 COPY ./conf/ /usr/local/etc/tinyproxy/
 
-# Startup
+# Startup, non-privileged user
+EXPOSE 8888/tcp
 USER 1001
 CMD ["tinyproxy", "-d"]

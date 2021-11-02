@@ -8,9 +8,9 @@ ENV tpRelease tinyproxy-${tpVersion}
 EXPOSE 8888/tcp
 
 # Download, decompress, install and clean up
-RUN microdnf install gcc make gzip tar wget && \
-	wget https://github.com/tinyproxy/tinyproxy/releases/download/${tpVersion}/${tpRelease}.tar.gz && \
-	tar xzvf ${tpRelease}.tar.gz -C /tmp && \ 
+RUN microdnf install gcc make gzip tar && \
+	curl -L -o tinyproxy.tar.gz https://github.com/tinyproxy/tinyproxy/releases/download/${tpVersion}/${tpRelease}.tar.gz && \
+	tar xzvf tinyproxy.tar.gz -C /tmp && \
 	cd /tmp/${tpRelease} && \
 	./configure && \
 	make && \

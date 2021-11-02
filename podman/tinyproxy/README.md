@@ -2,7 +2,7 @@
 
 ### Build
 
-Build the image.
+Build and tag an image.
 
 ```
 docker build . -t tinyproxy
@@ -10,18 +10,18 @@ docker build . -t tinyproxy
 
 ### Run
 
-Run the image.  Changing the default port with `-p` is recommended.
+Run a container.  Change the default port with `-p`.
 
 ```
-docker run -p 23128:8888 tinyproxy
+docker run --name=tinyproxy -p 23128:8888 tinyproxy
 ```
 
 ### Custom Config
 
-Optionally, use a mount to consume custom config.
+Run with custom config mounted in a volume.
 
 ```
-docker run -p 23128:8888 --name=tinyproxy -v $(pwd)/conf/:/usr/local/etc/tinyproxy/:z tinyproxy
+docker run --name=tinyproxy -p 23128:8888 -v $(pwd)/conf/:/usr/local/etc/tinyproxy/:z tinyproxy
 ```
 
-Note: SELinux (e.g. RedHat) requires `:z` to be addewd to volumnes.
+Note: SELinux distros (e.g. Red Hat, CentOS, Fedora) require `:z` for all volumnes.

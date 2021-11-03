@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - name: hashicorp_consul_template
   - name: hashicorp_envconsul
   - name: hashicorp_vault
   - name: s6

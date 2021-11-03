@@ -1,25 +1,25 @@
 ---
-- name: Check for fluent-bit service
+- name: Check for token file
   stat:
-    path: '{{ apm_agent_home }}/bin/.env'
-  register: vault_env_conf_file
+    path: '{{ apm_agent_home }}/bin/.vault-token'
+  register: vault_token_file
   become: yes
   become_user: wwwadm
 
 - name: Make a backup of the env file
   copy:
-    src: '{{ apm_agent_home }}/bin/.env'
-    dest: '{{ apm_agent_home }}/bin/.bak'
+    src: '{{ apm_agent_home }}/bin/.vault-token'
+    dest: '{{ apm_agent_home }}/bin/.vault-token.bak'
     remote_src: yes
   become: yes
   become_user: wwwadm
-  when: vault_env_conf_file.stat.exists
+  when: vault_token_file.stat.exists
   diff: no
 
 - name: Get current token (to revoke later)
-  shell: cat {{ apm_agent_home }}/bin/.env | grep VAULT_TOKEN | awk -F '"' '{print $2}' 
+  shell: cat {{ apm_agent_home }}/bin/.vault-token | grep VAULT_TOKEN | awk -F '"' '{print $2}' 
   register: previous_token
-  when: vault_env_conf_file.stat.exists
+  when: vault_token_file.stat.exists
   become: yes
   become_user: wwwadm
   check_mode: no
@@ -90,14 +90,15 @@
   when: not ansible_check_mode
   delegate_to: localhost
 
-- name: .env and wrapper files
+- name: bin files
   template:
     src: 'templates/bin/{{ item }}'
     dest: '{{ apm_agent_home }}/bin/{{ item }}'
     mode: '0775'
   loop:
-    - .env
+    - .env-template
     - fluentbitw
+    - .vault-token
   become: yes
   become_user: wwwadm
   when: not ansible_check_mode
@@ -125,7 +126,7 @@
     that:
       - previous_token.stdout | default('') | length > 0 
     msg: 'Vault token variable must not be empty'
-  when: vault_env_conf_file.stat.exists
+  when: vault_token_file.stat.exists
   delegate_to: localhost
   tags:
   - molecule-notest

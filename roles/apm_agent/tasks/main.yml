@@ -1,5 +1,7 @@
 ---
 - import_role:
+    name: hashicorp_consul_template
+- import_role:
     name: hashicorp_envconsul
 - import_role:
     name: hashicorp_vault

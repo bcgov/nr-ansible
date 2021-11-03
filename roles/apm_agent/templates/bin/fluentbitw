@@ -30,14 +30,16 @@ export HOST_ARCH=$(uname -m)
 export HOST_IP=$(ip addr | grep 'inet' | tr -s " " | cut -d' ' -f3 | cut -d'/' -f1 | grep -v '127.0.0.1')
 export HOST_MAC=$(ip link | grep 'link/ether' | tr -s " " | cut -d' ' -f3)
 
+source "${SCRIPT_DIR}/.vault-token"
 source "${SCRIPT_DIR}/.env"
 
 argsv=( "$@" )
 
 # default arguments
 if [ $# -eq 0 ]; then
-  argsv+=( '-c' "${FLUENT_HOME}/conf/fluent-bit.conf" )
+  argsv+=( "-c ${FLUENT_HOME}/conf/fluent-bit.conf" )
 fi
 
-# run fluent bit
-exec /sw_ux/bin/envconsul "-config=${FLUENT_HOME}/conf/fluent-bit.hcl" "${FLUENT_HOME}/bin/fluent-bit" "${argsv[@]}"
+exec /sw_ux/bin/consul-template -config "${FLUENT_HOME}/conf/fluent-bit.hcl" \
+        -template "${FLUENT_HOME}/bin/.env-template:${FLUENT_HOME}/bin/.env" \
+        -exec "${FLUENT_HOME}/bin/fluent-bit ${argsv[@]}"

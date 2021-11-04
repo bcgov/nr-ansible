@@ -33,13 +33,4 @@ export HOST_MAC=$(ip link | grep 'link/ether' | tr -s " " | cut -d' ' -f3)
 source "${SCRIPT_DIR}/.vault-token"
 source "${SCRIPT_DIR}/.env"
 
-argsv=( "$@" )
-
-# default arguments
-if [ $# -eq 0 ]; then
-  argsv+=( "-c ${FLUENT_HOME}/conf/fluent-bit.conf" )
-fi
-
-exec /sw_ux/bin/consul-template -config "${FLUENT_HOME}/conf/fluent-bit.hcl" \
-        -template "${FLUENT_HOME}/bin/.env-template:${FLUENT_HOME}/bin/.env" \
-        -exec "${FLUENT_HOME}/bin/fluent-bit ${argsv[@]}"
+exec /sw_ux/bin/consul-template -config "${FLUENT_HOME}/conf/fluent-bit.hcl"

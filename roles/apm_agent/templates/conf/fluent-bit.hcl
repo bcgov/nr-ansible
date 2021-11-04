@@ -9,7 +9,6 @@ vault {
 template {
   source = "{{ apm_agent_home }}/bin/.env-template"
   destination = "{{ apm_agent_home }}/bin/.env"
-  command = "{{ apm_agent_home }}/bin/fluent-bit -c {{ apm_agent_home }}/conf/fluent-bit.conf"
   command_timeout = "60s"
   error_on_missing_key = false
   backup = true
@@ -20,6 +19,7 @@ template {
 }
 
 exec {
+  command = "{{ apm_agent_home }}/bin/fluent-bit -c {{ apm_agent_home }}/conf/fluent-bit.conf"
   splay = "5s"
   env {
     pristine = false

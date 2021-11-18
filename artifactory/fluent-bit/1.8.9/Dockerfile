@@ -12,7 +12,8 @@ enabled         = 1 \n\
 RUN yum install -y td-agent-bit-${FLUENT_BIT_VERSION}
 
 WORKDIR /dropbox
-RUN cp /opt/td-agent-bit/bin/td-agent-bit ./fluent-bit && \
-    cp /usr/lib64/libpq.so.5.5 ./libpq.so.5 && \
-    tar -czvf fluent-bit.tar.gz fluent-bit libpq.so.5 && \
-    rm fluent-bit libpq.so.5
+RUN mkdir ./fluent-bit && \
+    cp /opt/td-agent-bit/bin/td-agent-bit ./fluent-bit/fluent-bit && \
+    cp /usr/lib64/libpq.so.5.5 ./fluent-bit/libpq.so.5 && \
+    tar -czvf fluent-bit.tar.gz ./fluent-bit && \
+    rm -rf ./fluent-bit

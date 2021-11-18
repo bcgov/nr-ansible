@@ -24,6 +24,7 @@ RUN cd build && \
     make install
 
 WORKDIR /dropbox
-RUN cp /usr/local/bin/fluent-bit /usr/lib64/libpq.so.5 . && \
-    tar -czvf fluent-bit.tar.gz fluent-bit libpq.so.5 && \
-    rm fluent-bit libpq.so.5
+RUN mkdir ./fluent-bit && \
+    cp /usr/local/bin/fluent-bit /usr/lib64/libpq.so.5 ./fluent-bit && \
+    tar -czvf fluent-bit.tar.gz fluent-bit && \
+    rm -rf ./fluent-bit

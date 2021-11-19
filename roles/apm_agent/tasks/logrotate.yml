@@ -6,15 +6,18 @@
 - name: logrotate configuration file
   template:
     src: 'templates/conf/logrotate.conf'
-    dest: '{{ apm_agent_home }}/conf/logrotate.conf'
+    dest: '/apps_ux/wwwsvr/logrotate.conf'
     mode: '0664'
   become: yes
-  become_user: wwwadm
+  become_user: wwwsvr
   when: logrotate.rc == 0
 
 - name: crontab for logrotate
   ansible.builtin.cron:
-    name: "check dirs"
-    special_time: hourly
-    job: "ls -alh > /dev/null"
+    name: "Logrotate for Fluent Bit"
+    hour: "2"
+    user: wwwsvr
+    job: "/sbin/logrotate /apps_ux/wwwsvr/logrotate.conf --state /apps_ux/wwwsvr/logrotate-state --verbose"
+  become: yes
+  become_user: wwwsvr
   when: logrotate.rc == 0

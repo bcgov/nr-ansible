@@ -143,31 +143,8 @@
   loop:
     - conf/fluent-bit.hcl
 
-- name: Check for logrotate
-  ansible.builtin.command: which logrotate
-  register: logrotate
-
-- name: logrotate configuration file
-  template:
-    src: 'templates/{{ item }}'
-    dest: '{{ apm_agent_home }}/{{ item }}'
-    mode: '0664'
-  become: yes
-  become_user: wwwadm
-  loop:
-    - conf/logrotate.conf
-  when: logrotate.rc == 0
-
-- name: crontab entry for logrotate
-  template:
-    src: 'templates/{{ item }}'
-    dest: '{{ apm_agent_home }}/{{ item }}'
-    mode: '0664'
-  become: yes
-  become_user: wwwadm
-  loop:
-    - conf/logrotate.conf
-  when: logrotate.rc == 0
-
 - name: Add run file
   import_tasks: add-run-file.yml
+
+- name: Add logrotate
+  import_tasks: logrotate.yml

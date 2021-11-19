@@ -1,0 +1,20 @@
+---
+- name: Check for logrotate
+  ansible.builtin.command: which logrotate
+  register: logrotate
+
+- name: logrotate configuration file
+  template:
+    src: 'templates/conf/logrotate.conf'
+    dest: '{{ apm_agent_home }}/conf/logrotate.conf'
+    mode: '0664'
+  become: yes
+  become_user: wwwadm
+  when: logrotate.rc == 0
+
+- name: crontab for logrotate
+  ansible.builtin.cron:
+    name: "check dirs"
+    special_time: hourly
+    job: "ls -alh > /dev/null"
+  when: logrotate.rc == 0

@@ -14,4 +14,5 @@
     dest: '/sw_ux/bin/jq'
     mode: '755'
   become: yes
-  become_user: wwwadm  when: not ansible_check_mode
+  become_user: wwwadm  
+  when: not ansible_check_mode

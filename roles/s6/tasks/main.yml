@@ -8,6 +8,7 @@
   become_user: wwwadm
 
 - name: Download s6
+  environment: '{{ proxy_env | default({}) }}'
   get_url:
     url: "https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64.tar.gz"
     dest: "/tmp/s6-overlay-amd64-v2.2.0.3.tar.gz"

@@ -18,16 +18,16 @@
   become: yes
   become_user: wwwadm
   tags:
-  - delete-app
+  - remove-app
 
 - name: Stop fluent-bit
   include_role:
     name: tomcat_stop
     apply:
-      tags: [delete-app]
+      tags: [remove-app]
   when: fluent_bit_run.stat.exists
   tags:
-  - delete-app
+  - remove-app
 
 - name: Create app conf directories
   file:
@@ -62,14 +62,14 @@
   become_user: wwwadm
   tags:
   - never
-  - delete-app
+  - remove-app
 
 - name: Start fluent-bit
   include_role:
     name: tomcat_start
     apply:
-      tags: delete-app
+      tags: remove-app
   when: fluent_bit_run.stat.exists
   tags:
   - molecule-notest
-  - delete-app
+  - remove-app

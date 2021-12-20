@@ -28,14 +28,21 @@
                   encoding="UTF-8"
                   splitStatements="true"
                   endDelimiter="/"
-                  path="sql/v2021.11.01.1755.1__create_iitd_lb_support_pkg.sql"
+                  path="sql/v2021.11.01.1754.1__create_iitd_lb_support_pkg.sql"
                   relativeToChangelogFile="true"
                   stripComments="true"/>
         <sqlFile  dbms="oracle"
                   encoding="UTF-8"
                   splitStatements="true"
                   endDelimiter="/"
-                  path="sql/v2021.11.01.1755.1__create_iitd_legacy_lb_support_pkg.sql"
+                  path="sql/v2021.11.01.1755.1__create_iitd_lb_support_pkg_body.sql"
+                  relativeToChangelogFile="true"
+                  stripComments="true"/>
+        <sqlFile  dbms="oracle"
+                  encoding="UTF-8"
+                  splitStatements="true"
+                  endDelimiter="/"
+                  path="sql/v2021.11.01.1755.1__create_iitd_legacy_lb_support_pkg_body.sql"
                   relativeToChangelogFile="true"
                   stripComments="true"/>
     </changeSet>

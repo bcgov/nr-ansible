@@ -178,7 +178,7 @@ create or replace package body iitd_lb_support_pkg as
                'user_ind_columns',
                p_stage,
                index_name || ' ' || table_name || ' ' || column_name || ' ' || column_position || ' ' ||
-               column_length || ' ' || char_length || ' ' || descend || ' ' || collated_column_id
+               column_length || ' ' || char_length || ' ' || descend
         from user_ind_columns
         where table_name not like 'NRDK%'
         order by index_name, table_name, column_name;
@@ -187,7 +187,7 @@ create or replace package body iitd_lb_support_pkg as
         select rownum,
                'user_source',
                p_stage,
-               name || ' ' || type || ' ' || line || ' ' || text || ' ' || origin_con_id
+               name || ' ' || type || ' ' || line || ' ' || text
         from user_source
         where name not like 'NRDK%'
         order by name, type, line;
@@ -198,8 +198,7 @@ create or replace package body iitd_lb_support_pkg as
                p_stage,
                OBJECT_NAME || ' ' || POLICY_GROUP || ' ' || POLICY_NAME || ' ' || PF_OWNER || ' ' || PACKAGE || ' ' ||
                FUNCTION || ' ' || SEL || ' ' || INS || ' ' || UPD || ' ' || DEL || ' ' || IDX || ' ' || CHK_OPTION ||
-               ' ' || ENABLE || ' ' || STATIC_POLICY || ' ' || POLICY_TYPE || ' ' || LONG_PREDICATE || ' ' || COMMON ||
-               ' ' || INHERITED
+               ' ' || ENABLE || ' ' || STATIC_POLICY || ' ' || POLICY_TYPE || ' ' || LONG_PREDICATE || ' ' || COMMON
         from user_policies
         order by object_name, policy_group, policy_name, pf_owner, package, function;
 
@@ -207,7 +206,7 @@ create or replace package body iitd_lb_support_pkg as
         select rownum,
                'user_sys_privs',
                p_stage,
-               USERNAME || ' ' || PRIVILEGE || ' ' || ADMIN_OPTION || ' ' || COMMON || ' ' || INHERITED
+               USERNAME || ' ' || PRIVILEGE || ' ' || ADMIN_OPTION || ' ' || COMMON
         from user_sys_privs
         order by username, privilege;
     end;

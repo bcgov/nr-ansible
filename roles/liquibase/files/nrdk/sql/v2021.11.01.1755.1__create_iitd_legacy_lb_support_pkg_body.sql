@@ -173,7 +173,7 @@ create or replace package body iitd_lb_support_pkg as
                p_stage,
                OBJECT_NAME || ' ' || POLICY_GROUP || ' ' || POLICY_NAME || ' ' || PF_OWNER || ' ' || PACKAGE || ' ' ||
                FUNCTION || ' ' || SEL || ' ' || INS || ' ' || UPD || ' ' || DEL || ' ' || IDX || ' ' || CHK_OPTION ||
-               ' ' || ENABLE || ' ' || STATIC_POLICY || ' ' || POLICY_TYPE || ' ' || LONG_PREDICATE || ' ' || COMMON
+               ' ' || ENABLE || ' ' || STATIC_POLICY || ' ' || POLICY_TYPE || ' ' || LONG_PREDICATE
         from user_policies
         order by object_name, policy_group, policy_name, pf_owner, package, function;
 
@@ -181,7 +181,7 @@ create or replace package body iitd_lb_support_pkg as
         select rownum,
                'user_sys_privs',
                p_stage,
-               USERNAME || ' ' || PRIVILEGE || ' ' || ADMIN_OPTION || ' ' || COMMON
+               USERNAME || ' ' || PRIVILEGE || ' ' || ADMIN_OPTION
         from user_sys_privs
         order by username, privilege;
     end;

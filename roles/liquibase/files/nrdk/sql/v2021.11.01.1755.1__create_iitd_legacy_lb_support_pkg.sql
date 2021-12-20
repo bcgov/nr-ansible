@@ -1,7 +1,7 @@
 --liquibase formatted sql
---changeset qed:iitd_support_pkg splitStatements:true endDelimiter:/
---preconditions onFail:WARN onError:HALT onFailMessage:"Running against Oracle RDBMS <= 11"
---precondition-sql-check expectedResult:STANDARD select decode(regexp_replace(version,'\..*',''),'11','LEGACY','STANDARD') from v$instance/
+--changeset qed:iitd_legacy_support_pkg splitStatements:true endDelimiter:/
+--preconditions onFail:CONTINUE onError:HALT
+--precondition-sql-check expectedResult:LEGACY select decode(regexp_replace(version,'\..*',''),'11','LEGACY','STANDARD') from v$instance/
 create or replace package iitd_lb_support_pkg as
     e_uncompiled_objects EXCEPTION;
     PRAGMA exception_init (e_uncompiled_objects, -20001);

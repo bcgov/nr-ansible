@@ -5,6 +5,10 @@
   become_user: "{{ lb_deploy_scripts_user }}"
   register: status_output
 
+- name: "Show verify stderr"
+  debug:
+    var: status_output.stderr_lines
+
 - name: "Show verify stdout"
   debug:
-    var: status_output
+    var: status_output.stdout_lines

@@ -1,6 +1,6 @@
 ---
 - name: "Status"
-  shell: "chdir={{ lb_working_dir }} JAVA_HOME={{ cd_app_home }}/jdk {{ lb_liquibase_staging_dir }}/liquibase --verbose status
+  shell: "chdir={{ lb_working_dir }} JAVA_HOME={{ cd_app_home }}/jdk {{ lb_liquibase_staging_dir }}/liquibase --verbose status"
   become: yes
   become_user: "{{ lb_deploy_scripts_user }}"
   register: status_output

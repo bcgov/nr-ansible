@@ -191,6 +191,7 @@ function modify_cpu_stats(tag, timestamp, record)
         core = core + 1
     end
     if core > 0 then
+        new_record["host.cpu.cores"] = core
         new_record["host.cpu.core_mean"] = stats.mean(core_cpu)
         new_record["host.cpu.core_median"] = stats.median(core_cpu)
         new_record["host.cpu.core_min"], new_record["host.cpu.core_max"] = stats.maxmin(core_cpu)

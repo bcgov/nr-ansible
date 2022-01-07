@@ -2,6 +2,9 @@
 - name: Check for logrotate
   ansible.builtin.command: which logrotate
   register: logrotate
+  become: yes
+  become_user: wwwsvr
+  check_mode: no
 
 - name: logrotate configuration file
   template:
@@ -10,7 +13,7 @@
     mode: '0664'
   become: yes
   become_user: wwwsvr
-  when: logrotate.rc == 0
+  when: logrotate.rc == 0 and not ansible_check_mode
 
 - name: crontab for logrotate
   ansible.builtin.cron:
@@ -21,4 +24,5 @@
     job: "/sbin/logrotate /apps_ux/wwwsvr/logrotate.conf --state /apps_ux/wwwsvr/logrotate-state --verbose"
   become: yes
   become_user: wwwsvr
-  when: logrotate.rc == 0
+  when: logrotate.rc == 0 and not ansible_check_mode
+  

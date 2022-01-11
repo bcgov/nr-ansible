@@ -8,8 +8,8 @@
 
 - name: logrotate configuration file
   template:
-    src: 'templates/conf/logrotate.conf'
-    dest: '/apps_ux/wwwsvr/logrotate.conf'
+    src: 'templates/conf/fluent-bit-logrotate.conf'
+    dest: '/apps_ux/wwwsvr/fluent-bit-logrotate.conf'
     mode: '0664'
   become: yes
   become_user: wwwsvr
@@ -21,7 +21,7 @@
     minute: "59"
     hour: "23"
     user: wwwsvr
-    job: "/sbin/logrotate /apps_ux/wwwsvr/logrotate.conf --state /apps_ux/wwwsvr/logrotate-state --verbose"
+    job: "/sbin/logrotate /apps_ux/wwwsvr/fluent-bit-logrotate.conf --state /apps_ux/wwwsvr/fluent-bit-logrotate-state --verbose"
   become: yes
   become_user: wwwsvr
   when: logrotate.rc == 0 and not ansible_check_mode

@@ -169,6 +169,12 @@ create or replace package body iitd_lb_support_pkg as
           and source_name = p_source_name
           and source_version = p_version_number;
         execute immediate 'create or replace ' || source_to_restore.text;
+    EXCEPTION
+        when OTHERS then
+            if SQLCODE <> -24344 then
+               raise;
+            end if;
+        null;
     end;
 
     -- Functions to generate and clear schema state data

@@ -171,10 +171,12 @@ create or replace package body iitd_lb_support_pkg as
         execute immediate 'create or replace ' || source_to_restore.text;
     EXCEPTION
         when OTHERS then
+            -- Catch Success with Compilation Error and ignore. When rolling back PL/SQL packages, the body is reverted
+            -- first and if is paired with a Spec change it will fail until the Spec is rolled back too. The recompile
+            -- happens after the rollback.
             if SQLCODE <> -24344 then
                raise;
             end if;
-        null;
     end;
 
     -- Functions to generate and clear schema state data

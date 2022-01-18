@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset qed:iitd_legacy_support_pkg_body splitStatements:true endDelimiter:/
+--changeset qed:iitd_legacy_support_pkg_body stripComments:false splitStatements:true endDelimiter:/
 --preconditions onFail:CONTINUE onError:HALT
 --precondition-sql-check expectedResult:LEGACY select decode(min(regexp_replace(regexp_replace(banner,'\..*',''),'.* ','')),'11','LEGACY','STANDARD') from v$version/
 create or replace package body iitd_lb_support_pkg as

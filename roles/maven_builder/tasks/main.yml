@@ -17,7 +17,7 @@
     - '{{ agent_home }}/maven'
     - '{{ agent_home }}/maven/.m2'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Deploy config
   import_tasks: deploy-config.yml

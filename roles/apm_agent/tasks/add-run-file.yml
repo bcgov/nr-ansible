@@ -4,7 +4,7 @@
     path: '{{ apm_agent_home }}/bin/.env'
   register: vault_env_conf_file
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Make a backup of the env file
   copy:
@@ -12,7 +12,7 @@
     dest: '{{ apm_agent_home }}/bin/.bak'
     remote_src: yes
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   when: vault_env_conf_file.stat.exists
   diff: no
 
@@ -21,7 +21,7 @@
   register: previous_token
   when: vault_env_conf_file.stat.exists
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   check_mode: no
   no_log: True
 
@@ -99,7 +99,7 @@
     - .env
     - fluentbitw
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   when: not ansible_check_mode
   diff: no
 
@@ -111,12 +111,12 @@
     state: link
     force: yes
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   
 - name: Register fluent bit
   shell: '/sw_ux/s6/bin/s6-svscanctl -an /apps_ux/s6_services'
   become: yes
-  become_user: wwwsvr
+  become_user: "{{ run_user }}"
   tags:
   - molecule-notest
 

@@ -4,7 +4,7 @@
     path: /apps_ux/s6_services/fluent-bit/run
   register: fluent_bit_run
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - uninstall
 
@@ -28,7 +28,7 @@
     - '{{ apm_agent_home }}/conf/metrics/input'
     - '{{ apm_agent_home }}/conf/metrics/parser'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Configuration files
   copy:
@@ -36,7 +36,7 @@
     dest: '{{ apm_agent_home }}'
     mode: '0644'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Create metrics scripts directories
   file:
@@ -46,7 +46,7 @@
   loop:
     - '{{ apm_agent_home }}/scripts/metrics'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Script files
   copy:
@@ -54,14 +54,14 @@
     dest: '{{ apm_agent_home }}'
     mode: '0755'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Remove metrics config
   file:
     state: absent
     path: '{{ apm_agent_home }}/conf/metrics'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - never
   - uninstall
@@ -71,7 +71,7 @@
     state: absent
     path: '{{ apm_agent_home }}/scripts/metrics'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - never
   - uninstall

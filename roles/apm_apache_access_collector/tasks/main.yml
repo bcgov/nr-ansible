@@ -4,7 +4,7 @@
     path: /apps_ux/s6_services/fluent-bit/run
   register: fluent_bit_run
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - uninstall-safe
   - uninstall-all
@@ -30,7 +30,7 @@
     - '{{ apm_agent_home }}/conf/apache/input'
     - '{{ apm_agent_home }}/conf/apache/parser'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Filter configuration file
   template:
@@ -38,7 +38,7 @@
     dest: '{{ apm_agent_home }}/conf/apache/{{ item }}'
     mode: '0664'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   loop:
     - filter/filters.conf
 
@@ -48,7 +48,7 @@
     dest: '{{ apm_agent_home }}/conf/apache'
     mode: '0644'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   loop:
     - conf/apache/input
 
@@ -57,7 +57,7 @@
     state: absent
     path: '{{ apm_agent_home }}/conf/apache'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - never
   - uninstall-safe

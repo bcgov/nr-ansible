@@ -5,7 +5,7 @@
     state: directory
     mode: '0755'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Download Hashicorp Envconsul
   environment: '{{ proxy_env | default({}) }}'
@@ -15,7 +15,7 @@
     checksum: 'sha256:https://releases.hashicorp.com/envconsul/0.11.0/envconsul_0.11.0_SHA256SUMS'
     mode: '0644'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Extract Hashicorp Envconsul
   unarchive:
@@ -24,5 +24,5 @@
     remote_src: yes
     mode: '0755'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   when: not ansible_check_mode

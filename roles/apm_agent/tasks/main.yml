@@ -18,7 +18,7 @@
     path: /apps_ux/s6_services/fluent-bit/run
   register: fluent_bit_run
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - uninstall-safe
   - uninstall-all
@@ -44,7 +44,7 @@
     - '{{ apm_agent_home }}/logs'
     - '{{ apm_agent_home }}/scripts'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - never
   - uninstall-safe
@@ -54,7 +54,7 @@
     state: absent
     path: '{{ apm_agent_home }}'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - never
   - uninstall-all
@@ -73,7 +73,7 @@
     - '{{ apm_agent_home }}/logs'
     - '{{ apm_agent_home }}/scripts'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Create s6 directories
   file:
@@ -83,7 +83,7 @@
   loop:
     - '{{ apm_agent.service_dir }}'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Download files
   get_url:
@@ -96,7 +96,7 @@
   loop:
     - '{{ apm_agent.url.zip }}'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   no_log: True
 
 - name: Extract bin
@@ -108,7 +108,7 @@
     extra_opts: [--strip-components=1]
     mode: '0775'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   when: not ansible_check_mode
 
 - name: Extract lib
@@ -120,7 +120,7 @@
     extra_opts: [--strip-components=1]
     mode: '0775'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   when: not ansible_check_mode
 
 - name: Configuration files
@@ -129,7 +129,7 @@
     dest: '{{ apm_agent_home }}'
     mode: '0664'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: envconsul configuration file
   template:
@@ -137,7 +137,7 @@
     dest: '{{ apm_agent_home }}/{{ item }}'
     mode: '0664'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   loop:
     - conf/fluent-bit.hcl
 

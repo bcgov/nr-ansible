@@ -16,7 +16,7 @@
     path: /apps_ux/s6_services/fluent-bit/run
   register: fluent_bit_run
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - delete-app
 
@@ -40,7 +40,7 @@
     - '{{ apm_agent_home }}/conf/{{ app | lower }}-{{ component | lower }}/input'
     - '{{ apm_agent_home }}/conf/{{ app | lower }}-{{ component | lower }}/parser'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Configuration files
   template:
@@ -52,14 +52,14 @@
     - input/inputs.conf
     - parser/parsers.conf
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
 
 - name: Remove component config
   file:
     state: absent
     path: '{{ apm_agent_home }}/conf/{{ app | lower }}-{{ component | lower }}'
   become: yes
-  become_user: wwwadm
+  become_user: "{{ install_user }}"
   tags:
   - never
   - delete-app

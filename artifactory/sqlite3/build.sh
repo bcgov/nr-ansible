@@ -1,20 +1,20 @@
 #!/bin/bash
 set -euo nounset
 
-FLUENT_BIT_VERSION=$1
+SQLITE_VERSION=$1
 
 # Build
-podman build --build-arg FLUENT_BIT_VERSION=${FLUENT_BIT_VERSION} -t fb-${FLUENT_BIT_VERSION} .
+podman build --build-arg SQLITE_VERSION=${SQLITE_VERSION} -t sqlite-${SQLITE_VERSION} .
 
 # Run (remove stale)
-podman rm -fv fb-origin || true
-podman run --name=fb-origin -tid fb-${FLUENT_BIT_VERSION} bash
+podman rm -fv sqlite-origin || true
+podman run --name=sqlite-origin -tid sqlite-${SQLITE_VERSION} bash
 
 # Copy out
-podman cp fb-origin:/dropbox/fluent-bit.tar.gz .
+podman cp sqlite-origin:/dropbox/sqlite.tar.gz .
 
 # Clean up
-podman rm -fv fb-origin
+podman rm -fv sqlite-origin
 
 # Artifactory instructions
 #echo -e "\nUpload to Artifactory:"

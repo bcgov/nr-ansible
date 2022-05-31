@@ -5,7 +5,7 @@ be used by the Fluent Bit Jenkins job to deploy to NRM servers.
 
 ## Set environment
 
-First set your Artifactory username and password.
+First set your Artifactory username and password. The username is your email address.
 
 ```
 read ARTIFACTORY_USER

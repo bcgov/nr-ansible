@@ -17,5 +17,5 @@ podman cp sqlite-origin:/dropbox/sqlite.tar.gz .
 podman rm -fv sqlite-origin
 
 # Artifactory instructions
-#echo -e "\nUpload to Artifactory:"
-#curl -X PUT -u "${ARTIFACTORY_USER}:${ARTIFACTORY_PASS}" -T fluent-bit.tar.gz "https://bwa.nrs.gov.bc.ca/int/artifactory/ext-binaries-local/fluent/fluent-bit/${FLUENT_BIT_VERSION}/fluent-bit.tar.gz"
+echo -e "\nUpload to Artifactory:"
+curl -X PUT -u "${ARTIFACTORY_USER}:${ARTIFACTORY_PASS}" -T sqlite.tar.gz "https://bwa.nrs.gov.bc.ca/int/artifactory/ext-binaries-local/sqlite/${SQLITE_VERSION}/sqlite.tar.gz"

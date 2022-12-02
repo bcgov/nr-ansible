@@ -21,8 +21,16 @@ export ARTIFACTORY_PASS
 
 ## Build and upload package
 
-Run artifactory/fluent-bit/build.sh and pass it the version of Fluent Bit you want to build.
+Run artifactory/fluent-bit/build.sh and pass it the Fluent Bit/RHEL version you want to build.
+
+Build Fluent Bit 1.9.1 for RHEL 7:
 
 ```
-artifactory/fluent-bit/build.sh 1.9.1
+artifactory/fluent-bit/build.sh 1.9.1 7
+```
+
+Build Fluent Bit 1.9.1 for RHEL 8:
+
+```
+artifactory/fluent-bit/build.sh 1.9.1 7
 ```

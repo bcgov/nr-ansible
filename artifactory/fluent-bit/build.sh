@@ -20,5 +20,5 @@ podman cp fb-origin:/dropbox/fluent-bit-rhel${RHEL_VERSION}.tar.gz .
 podman rm -fv fb-origin
 
 # Artifactory instructions
-#echo -e "\nUpload to Artifactory:"
-#curl -X PUT -u "${ARTIFACTORY_USER}:${ARTIFACTORY_PASS}" -T "fluent-bit-rhel${RHEL_VERSION}.tar.gz" "https://bwa.nrs.gov.bc.ca/int/artifactory/ext-binaries-local/fluent/fluent-bit/${FLUENT_BIT_VERSION}/fluent-bit-rhel${RHEL_VERSION}.tar.gz"
+echo -e "\nUpload to Artifactory:"
+curl -X PUT -u "${ARTIFACTORY_USER}:${ARTIFACTORY_PASS}" -T "fluent-bit-rhel${RHEL_VERSION}.tar.gz" "https://bwa.nrs.gov.bc.ca/int/artifactory/ext-binaries-local/fluent/fluent-bit/${FLUENT_BIT_VERSION}/fluent-bit-rhel${RHEL_VERSION}.tar.gz"

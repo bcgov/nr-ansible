@@ -10,4 +10,4 @@ jdk_archive:
   version: "1.8.0_192"
   filename: "jdk-8u192-linux-x64.tar.gz"
   url: "{{ artifactory_url }}/ext-binaries-local/com.oracle/jdk8/jdk-8u192-linux-x64.tar.gz"
-  checksum: "sha1:9e482a7ded535f14916f91510b78904eace28e49"
+  checksum: "sha1:7f75446ac40907446cdfdb9e9b05b3f0f2580613"

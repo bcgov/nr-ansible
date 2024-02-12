@@ -140,7 +140,7 @@ create or replace package body iitd_lb_support_pkg as
               and type = source_type
             order by line;
         existing_source clob;
-        view_text varchar2(4000);
+        view_text varchar2(32000);
     begin
         dbms_lob.CREATETEMPORARY(existing_source, true);
         if (upper(source_type) = 'VIEW') then

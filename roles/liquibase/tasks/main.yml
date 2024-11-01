@@ -65,6 +65,24 @@
   #    mode: 0755
   become: yes
   become_user: "{{ lb_deploy_scripts_user }}"
+  when: github_token is defined and (github_token | length > 0)
+
+- name: "download artifact from GitHub repo: {{ lb_migrations_artifact.name }}"
+  maven_artifact:
+    repository_url: "{{ lb_app_artifactory_download_url }}"
+    group_id: "{{ lb_migrations_artifact.group_id }}"
+    artifact_id: "{{ lb_migrations_artifact.artifact_id }}"
+    version: "{{ lb_migrations_artifact.version }}"
+    extension: "{{ lb_migrations_artifact.type }}"
+    classifier: "{{ lb_migrations_artifact.classifier }}"
+    dest: "{{ cd_app_home }}/{{ lb_migrations_artifact.name }}"
+    timeout: 100
+    headers:
+      Authorization: "Bearer {{ github_token }}"
+  #    mode: 0755
+  become: yes
+  become_user: "{{ lb_deploy_scripts_user }}"
+  when: github_token is defined and (github_token | length > 0)
 
 - name: "uncompress {{ lb_migrations_artifact.name }}"
   unarchive:

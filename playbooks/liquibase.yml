@@ -46,12 +46,14 @@
     # install a JDK specific to this application
     - name: jdk
       vars:
-        jdk_version: '8'
+        # jdk_version: '8'
         cd_app_install: '{{ cd_app_home }}' # cd_app_home provided by cd-configure
-        jdk_install_as: 'runner'
+        #jdk_install_as: 'runner'
 
     - name: liquibase
       vars:
          artifact_version: "{{ cd_version }}"
          #TODO - This could be done as a configuration variable in the liquibase role
          #db_jdbc_driver_artifactory_url: "https://bwa.nrs.gov.bc.ca/int/artifactory/ext-binaries-local/com.oracle/ojdbc8-19.3.0.0.jar"
+         db_jdbc_driver_url: "https://download.oracle.com/otn-pub/otn_software/jdbc/235/ojdbc11.jar"
+

@@ -65,7 +65,7 @@
   #    mode: 0755
   become: yes
   become_user: "{{ lb_deploy_scripts_user }}"
-  when: github_token is defined and (github_token | length > 0)
+  when: (username is defined and (username | length > 0) and password is defined and (password | length > 0))
 
 - name: "download artifact from GitHub repo: {{ lb_migrations_artifact.name }}"
   maven_artifact:

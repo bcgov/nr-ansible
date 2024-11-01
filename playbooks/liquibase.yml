@@ -48,6 +48,7 @@
       vars:
         # jdk_version: '8'
         cd_app_install: '{{ cd_app_home }}' # cd_app_home provided by cd-configure
+        sign_jdk: False
         #jdk_install_as: 'runner'
 
     - name: liquibase
